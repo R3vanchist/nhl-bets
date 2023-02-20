@@ -1,0 +1,33 @@
+import requests
+import json
+
+# Set up the NHL API endpoint and headers
+nhl_api_endpoint = 'https://statsapi.web.nhl.com/api/v1/people/{}/stats?stats=gameLog&season=20212022'
+nhl_api_headers = {'Content-Type': 'application/json'}
+
+# Define a function to get a player's last 10 games stats
+def get_player_last_10_games_stats(player_id):
+    # Make a request to the NHL API
+    response = requests.get(nhl_api_endpoint.format(player_id), headers=nhl_api_headers)
+    # Check if the request was successful
+    if response.status_code != 200:
+        print(f"Error {response.status_code}: Failed to get NHL stats.")
+        return
+    # Parse the response as JSON
+    stats = json.loads(response.text)
+    # Get the last 10 games stats
+    last_10_games_stats = stats['stats'][0]['splits'][-10:]
+    # Print the last 10 games stats
+    print(f"Last 10 games stats for player {player_id}:")
+    for game in last_10_games_stats:
+        print(f"Game date: {game['date']}")
+        print(f"Goals: {game['stat']['goals']}")
+        print(f"Assists: {game['stat']['assists']}")
+        print(f"Points: {game['stat']['points']}")
+        print(f"Plus/Minus: {game['stat']['plusMinus']}")
+        print(f"Shots: {game['stat']['shots']}")
+        print(f"Time on Ice: {game['stat']['timeOnIce']}")
+        print("="*30)
+
+# Example usage
+get_player_last_10_games_stats(8478402) # Sidney Crosby's player ID
