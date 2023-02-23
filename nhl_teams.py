@@ -41,6 +41,8 @@ def compare_json_txt():
             goals_against = team['GA/G']
             tEAM = team['TEAM']
             break_between = '='*30
+            total = float(goals_for) + float(goals_against)
             if team['TEAM'] in txt_data:
                 print(f"{break_between}\nTeam: {tEAM}\nGoals per game: {goals_for}\nGoals against per game: {goals_against}")
+                print(f"Total: {total}")
 compare_json_txt()
