@@ -30,12 +30,16 @@ def conv_csv_json():
     with open('nhl_data.json', 'w') as jsonfile:
         jsonfile.write(json_string)
 conv_csv_json()
+
 def compare_json_txt():
     with open('todays_games.txt', 'r') as games, open('nhl_data.json', 'r') as stats:
         txt_data = games.read()
         json_data = json.load(stats)
         # Compare the text data to the JSON data
         for team in json_data:
+            goals_for = team['G/G']
+            goals_against = team['GA/G']
+            tEAM = team['TEAM']
             if team['TEAM'] in txt_data:
-                print(team['TEAM'], team['G/G'], team['GA/G'])
+                print(f"Team: {tEAM} Goals per game: {goals_for} Goals against per game: {goals_against}")
 compare_json_txt()
