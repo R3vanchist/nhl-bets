@@ -7,3 +7,4 @@ NHL stats web scrapper wrote in Python.
 - [x] Teams totals for O/U.
 - [ ] Create a GUI.
 - [ ] Incorporate AI to predict future outcomes.
+- [ ] Add Goalie's SV% and average shot on goal/shots against on goal for both teams to add or subtract a 0.5 point.
