@@ -1,5 +1,6 @@
 import requests
 import datetime
+import json
 
 def schedule():
     today = datetime.date.today()
@@ -11,23 +12,30 @@ def schedule():
     url = f"https://statsapi.web.nhl.com/api/v1/schedule?date={date_str}&expand=schedule.teams"
     response = requests.get(url)
 
-    filename = 'todays_games.txt'
-    with open(filename, 'w') as todays_teams:
-        # check if the request was successful
-        if response.status_code == 200:
-            # parse the JSON response
-            data = response.json()
+    # check if the request was successful
+    if response.status_code == 200:
+        # parse the JSON response
+        data = response.json()
             
-            # extract the game information from the response
-            games = data["dates"][0]["games"]
-            i = 1
-            # iterate over the games and print the information
-            for game in games:
-                away_team = game["teams"]["away"]["team"]["name"]
-                away_abbr = game["teams"]["away"]["team"]["abbreviation"]
-                home_team = game["teams"]["home"]["team"]["name"]
-                home_abbr = game["teams"]["home"]["team"]["abbreviation"]
-                todays_teams.write(f"{i} {away_team}, {away_abbr} @ {home_team}, {home_abbr}\n")
-                i = i + 1
-        else:
-            print(f"Error retrieving NHL schedule: {response.status_code}")
+        # extract the game information from the response
+        games = data["dates"][0]["games"]
+        dailyGames = []
+        # iterate over the games and print the information
+        i = 0
+        for game in games:
+            away_team = game["teams"]["away"]["team"]["name"]
+            #away_abbr = game["teams"]["away"]["team"]["abbreviation"]
+            home_team = game["teams"]["home"]["team"]["name"]
+            #home_abbr = game["teams"]["home"]["team"]["abbreviation"]
+            i += 1
+            dailyGames.append({
+                'Game': i,
+                'Away Team': away_team,
+                'Home Team': home_team
+            })
+        filename = f'todays_games.json'
+        with open(filename, 'w') as f:
+            json.dump(dailyGames, f)
+        
+    else:
+        print(f"Error retrieving NHL schedule: {response.status_code}")
